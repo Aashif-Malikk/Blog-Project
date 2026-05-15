@@ -7,9 +7,8 @@ const authRoutes = require('./routes/auth')
 require('dotenv').config()
 const PORT = process.env.PORT
 
-
 app.use(cors({
-  origin: "https://blogggwebsite.netlify.app", // Your Netlify URL
+  origin: "https://blogggwebsite.netlify.app",
   credentials: true
 }));
 

@@ -7,7 +7,12 @@ const authRoutes = require('./routes/auth')
 require('dotenv').config()
 const PORT = process.env.PORT
 
-app.use(cors())
+
+app.use(cors({
+  origin: "https://blogggwebsite.netlify.app", // Your Netlify URL
+  credentials: true
+}));
+
 app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 

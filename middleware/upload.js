@@ -10,9 +10,10 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 const multer = require('multer');
+const { cloudinary_js_config } = require('../config/cloudinary');
 
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
+    cloudinary: cloudinary_js_config,
     params: {
         folder: 'blog_uploads',
         allowed_formats: ['jpg', 'png', 'jpeg', 'webp']

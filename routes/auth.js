@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authCtrl = require('../controller/authController')
-const upload = require('../middleware/upload')
+const upload = require('../middleware/multer')
 const verifyToken = require('../middleware/tokenMiddleware')
 
 const handleUpload = (req, res, next) => {

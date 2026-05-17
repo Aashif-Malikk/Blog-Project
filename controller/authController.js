@@ -1,12 +1,8 @@
-const path = require('path')
-const fs = require('fs')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Sell = require('../models/schema').Image
 const User = require('../models/schema').User
 const secretkey = process.env.SECRET_KEY || 'defaultSecretKey'
-
-const uploadDir = path.join(__dirname, '..', 'uploads')
 
 // ---------------- Selling (multipart: field name "image") ----------------
 
@@ -19,7 +15,6 @@ exports.sellDetail = async (req, res) => {
     const { title, description, tags, price } = req.body
 
     if (!title || !String(title).trim()) {
-      fs.unlinkSync(path.join(uploadDir, req.file.filename))
       return res.status(400).json({ msg: 'Title is required' })
     }
 
@@ -32,7 +27,7 @@ exports.sellDetail = async (req, res) => {
       }
     }
 
-    const imgSrc = `/uploads/${req.file.filename}`
+    const imgSrc = req.file?.path || ''
     const selling = new Sell({
       title: String(title).trim(),
       description: description != null ? String(description) : '',
@@ -40,17 +35,13 @@ exports.sellDetail = async (req, res) => {
       tags: tags != null ? String(tags) : '',
       imgSrc,
       price: price != null ? String(price) : '',
-      user: req.userId
+      user: req.userId,
     })
 
     await selling.save()
 
     return res.json({ msg: 'Image Uploaded Successfully', imgSrc })
   } catch (err) {
-    if (req.file?.filename) {
-      const filePath = path.join(uploadDir, req.file.filename)
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-    }
     console.error(err)
     return res.status(500).json({
       msg: 'Server error',
